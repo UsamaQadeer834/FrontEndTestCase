@@ -1,0 +1,216 @@
+<!-- navbar area, for filter input-->
+<nav class="navbar sticky-top navbar-light bg-light">
+    <div class="container-fluid w-50">
+        <label for="search-user" class="col-sm-2 col-form-label">Search for employee:</label>
+        <div class="col-sm-10">
+            <input 
+                type="text" 
+                class="form-control" 
+                (keyup)="doFilter($event.target.value)" 
+                id="search-user"
+                placeholder="Enter a name" />
+        </div>
+    </div>
+</nav>
+<!-- /end of navbar area-->
+
+
+<!-- start of displaying user content-->
+<div class="container pt-5">
+    <h2>Users</h2>
+    <table class="table mb-5 align-middle" id="users">
+        <thead>
+            <tr>
+                <th style="width:20%;" scope="col">#</th>
+                <th style="width:20%;" scope="col">First</th>
+                <th style="width:20%;" scope="col">Last</th>
+                <th style="width:20%;" scope="col">Role</th>
+                <th style="width:20%;" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of userRole; let i = index">
+                <th scope="row">{{ i + 1}}</th>
+                <td>{{user.firstName}}</td>
+                <td>{{user.lastName}}</td>
+                <td>{{enumUserRoles[user.role]}}</td>
+                <td>
+                    <button 
+                        type="button" 
+                        class="btn btn-outline-danger btn-sm" 
+                        (click)="removeUser(i)">
+                        Delete
+                    </button>
+            </tr>
+
+            <!-- Start of, If No Users Exists -->
+            <tr *ngIf="!userRole.length">
+                <td>No Record Found</td>
+            </tr>
+            <!-- End of, If No Users Exists -->
+
+        </tbody>
+    </table>
+
+    <h2>Senior Users</h2>
+    <table class="table mb-5 align-middle" id="senior-users">
+        <thead>
+            <tr>
+                <th style="width:20%;" scope="col">#</th>
+                <th style="width:20%;" scope="col">First</th>
+                <th style="width:20%;" scope="col">Last</th>
+                <th style="width:20%;" scope="col">Role</th>
+                <th style="width:20%;" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of seniorUsers; let i = index">
+                <th scope="row">{{ i + 1}}</th>
+                <td>{{user.firstName}}</td>
+                <td>{{user.lastName}}</td>
+                <td>{{enumUserRoles[user.role]}}</td>
+                <td>
+                    <button 
+                        type="button" 
+                        class="btn btn-outline-danger btn-sm"
+                        (click)="removeSeniorUser(i)">
+                        Delete
+                    </button>
+            </tr>
+
+            <!-- Start of, If No Senior Users Exists -->
+            <tr *ngIf="!seniorUsers.length">
+                <td>No Record Found</td>
+            </tr>
+            <!-- End of, If No Senior Users Exists -->
+
+        </tbody>
+    </table>
+
+    <h2>WFM</h2>
+    <table class="table mb-5 align-middle" id="wfm-users">
+        <thead>
+            <tr>
+                <th style="width:20%;" scope="col">#</th>
+                <th style="width:20%;" scope="col">First</th>
+                <th style="width:20%;" scope="col">Last</th>
+                <th style="width:20%;" scope="col">Role</th>
+                <th style="width:20%;" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of wfmProfessionals; let i = index">
+                <th scope="row">{{ i + 1}}</th>
+                <td>{{user.firstName}}</td>
+                <td>{{user.lastName}}</td>
+                <td>{{enumUserRoles[user.role]}}</td>
+                <td>
+                    <button 
+                        type="button" 
+                        class="btn btn-outline-danger btn-sm"
+                        (click)="removeWFMProfessional(i)">
+                        Delete
+                    </button>
+            </tr>
+
+            <!-- Start of, If No WFM Users Exists -->
+            <tr *ngIf="!wfmProfessionals.length">
+                <td colspan="4">No Record Found</td>
+            </tr>
+            <!-- End of, If No WFM Users Exists -->
+
+        </tbody>
+    </table>
+    <button 
+        (click)="openAddUserModal(addUsertemplate)" 
+        type="button" 
+        class="btn btn-primary" 
+        data-bs-toggle="modal"
+        data-bs-target="#add-user-modal">
+        Add User
+    </button>
+</div>
+<!-- /end of displaying user content-->
+
+
+
+<!-- modal area-->
+<ng-template #addUsertemplate>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add a new user</h4>
+        <button 
+            type="button" 
+            class="close btn-close pull-right" 
+            aria-label="Close" 
+            (click)="addUserModalRef?.hide()">
+            <span aria-hidden="true" class="visually-hidden">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <form [formGroup]="addUserForm">
+            <div class="mb-3">
+                <label for="first-name-input">First Name <span class="required">*</span></label>
+                <input 
+                    formControlName="firstName" 
+                    type="text" 
+                    class="form-control" 
+                    id="first-name-input"
+                    placeholder="Mark" />
+                <div 
+                    class="text-danger"
+                    *ngIf="addUserForm.get('firstName').hasError('required') && (addUserForm.get('firstName').dirty || addUserForm.get('firstName').touched)">
+                    Required
+                </div>
+            </div>
+
+
+            <div class="mb-3">
+                <label for="last-name-input">Last Name <span class="required">*</span></label>
+                <input 
+                    formControlName="lastName" 
+                    type="text" 
+                    class="form-control" 
+                    id="last-name-input"
+                    placeholder="Otto">
+                <div 
+                    class="text-danger"
+                    *ngIf="addUserForm.get('lastName').hasError('required') && (addUserForm.get('lastName').dirty || addUserForm.get('lastName').touched)">
+                    Required
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="role-select">Role <span class="required">*</span></label>
+                <select formControlName="role" class="form-select w-100 py-1" id="role-select" aria-label="Role select">
+                    <option disabled>Select a role</option>
+                    <option value="1">User</option>
+                    <option value="2">Senior User</option>
+                    <option value="3">WFM</option>
+                </select>
+                <div 
+                    class="text-danger"
+                    *ngIf="addUserForm.get('role').hasError('required') && (addUserForm.get('role').dirty || addUserForm.get('role').touched)">
+                    Required
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        <button 
+            type="button" 
+            class="btn btn-secondary" 
+            data-bs-dismiss="modal"
+            (click)="addUserModalRef?.hide()">
+            Close
+        </button>
+        <button 
+            type="button" 
+            [disabled]="!addUserForm.valid" 
+            class="btn btn-primary"
+            (click)="addUser(); addUserModalRef?.hide()">
+            Save changes
+        </button>
+    </div>
+</ng-template>
